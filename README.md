@@ -97,3 +97,34 @@ If you want to use original pretrained weights for YOLOv3:
 6. The training strategy is for reference only. Adjust it according to your dataset and your goal. And add further strategy if needed.
 
 7. For speeding up the training process with frozen layers train_bottleneck.py can be used. It will compute the bottleneck features of the frozen model first and then only trains the last layers. This makes training on CPU possible in a reasonable time. See [this](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) for more information on bottleneck features.
+
+
+## liang add
+* to run "python yolo_video.py --input <filename> --output <filename>" ok in tf-2.x, update the "yolo.py"
+```
+diff --git a/yolo.py b/yolo.py
+index 4aa3486..a907e7b 100644
+--- a/yolo.py
++++ b/yolo.py
+@@ -8,7 +8,8 @@ import os
+ from timeit import default_timer as timer
+ 
+ import numpy as np
+-from keras import backend as K
++#from keras import backend as K
++import tensorflow.python.keras.backend as K
+ from keras.models import load_model
+ from keras.layers import Input
+ from PIL import Image, ImageFont, ImageDraw
+@@ -18,6 +19,9 @@ from yolo3.utils import letterbox_image
+ import os
+ from keras.utils import multi_gpu_model
+ 
++import tensorflow as tf
++tf.compat.v1.disable_eager_execution()
++
+ class YOLO(object):
+     _defaults = {
+         "model_path": 'model_data/yolo.h5',
+
+```
